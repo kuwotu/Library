@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/e5c8536330.js" crossorigin="anonymous"></script>
+    <title>Library Project</title>
+</head>
+<body>
+    <div id="titleContainer">
+      <i class="fas fa-book"  data-fa-transform="rotate-45"></i>
+        <h1 id="title">My Library</h1>
+          </div>
+        <div>
+        <p id="infoContainer">This libary is here to help you keep track of your reading. Post the books you've read, as well as the ones you're planning to!</p>
+          </div>
+        
+        <div id="CenterContainer">
+        <div id="booksContainer">
+        <p>Books read: </p>
+        <p>Books not read: </p>
+          </div>
+          </div>
+        
+        <div id="AddBookContainer">
+          <form id="AddBookForm" autocomplete="off">
+          <p>Book</p>
+          <input type="text" id="bookName">
+          <p>Author</p>
+          <input type="text" id="authorName">
+          <div>
+            <label>
+              <select name="read-option" id="readOption">
+                <option value="Read">Read</option>
+                <option value="Not Read">Not Read</option>
+            </select>
+                </div>
+          <button id="addBookBtn" >Add Book</button>
+              </form>
+            </div>
+        
+        <div id="BookInfoContainer">
+        <ul id="BookInfo">
+          <li id="titleLabel">Title</li>
+          <li id="authorLabel">Author</li>
+          <li id="statusLabel">Status</li>
+          <li id="editLabel">Edit</li>
+          <li id="removeLabel">Remove</li>
+        </ul>
+        </div>
+        <div id="BooksAddedContainer">
+        <div class="BooksAdded">
+          <p>Atomic Habits</p>
+          <p>James Clear</p>
+          <button class="ReadBtn"></button>
+          <button class="EditBtn">Edit</button>
+          <button class="DeleteBtn"></button>
+        </div>
+      </div>
+        <script src="script.js"></script>
+</body>
+</html>
