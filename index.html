@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/e5c8536330.js" crossorigin="anonymous"></script>
     <title>Library Project</title>
@@ -18,17 +20,17 @@
         
         <div id="CenterContainer">
         <div id="booksContainer">
-        <p>Books read: </p>
-        <p>Books not read: </p>
+        <p id="booksRead">Books read: </p>
+        <p id="booksNotRead">Books not read: </p>
           </div>
           </div>
         
         <div id="AddBookContainer">
           <form id="AddBookForm" autocomplete="off">
           <p>Book</p>
-          <input type="text" id="bookName">
+          <input type="text" id="bookName" class="inputField" placeholder="Book">
           <p>Author</p>
-          <input type="text" id="authorName">
+          <input type="text" id="authorName" class="inputField" placeholder="Author">
           <div>
             <label>
               <select name="read-option" id="readOption">
@@ -36,13 +38,13 @@
                 <option value="Not Read">Not Read</option>
             </select>
                 </div>
-          <button id="addBookBtn" >Add Book</button>
+          <button id="addBookBtn">Add Book</button>
               </form>
             </div>
         
         <div id="BookInfoContainer">
         <ul id="BookInfo">
-          <li id="titleLabel">Title</li>
+          <li id="BookLabel">Book</li>
           <li id="authorLabel">Author</li>
           <li id="statusLabel">Status</li>
           <li id="editLabel">Edit</li>
