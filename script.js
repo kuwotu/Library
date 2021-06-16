@@ -13,6 +13,7 @@ const deleteBtn = document.getElementsByClassName("DeleteBtn");
 const readBtn = document.getElementsByClassName("ReadBtn");
 const notReadBtn = document.getElementsByClassName("NotReadBtn");
 const editBtn = document.getElementsByClassName("EditBtn");
+const saveChangesButton = document.getElementsByClassName("saveChangesBtn");
 const booksAddedDiv = document.getElementsByClassName("BooksAdded");
 
 const readStatus = document.querySelectorAll("[changeStatus]");
@@ -24,6 +25,13 @@ function Book(title, author, readYet) {
   this.author = author;
   this.readYet = readYet;
 }
+
+Book.prototype.changeReadStatus = function () {
+  if (this.readYet === "Read") this.readYet === "Not Read";
+  else if (this.readYet === "Not Read") {
+    this.readYet === "Read";
+  }
+};
 
 // assigned the value inputs as variable so that they can be passed through the new Book object
 
@@ -64,18 +72,24 @@ displayBooks = () => {
     p2.textContent = myLibrary[i].author;
 
     const statusButton = document.createElement("button");
-    statusButton.classList.add("ReadBtn");
-    statusButton.setAttribute("data-name", `changeStatus`);
-    statusButton.setAttribute("data-number", `${i}`);
-
     if (myLibrary[i].readYet === "Not Read") {
       statusButton.classList.add("NotReadBtn");
+    } else if (myLibrary[i].readYet === "Read") {
+      statusButton.classList.add("ReadBtn");
     }
+    statusButton.setAttribute("data-name", `changeStatus`);
+    statusButton.setAttribute("data-number", `${i}`);
 
     const editButton = document.createElement("button");
     editButton.classList.add("EditBtn");
     editButton.textContent = "Edit";
     editButton.setAttribute("data-number", `${i}`);
+
+    const saveChangesButton = document.createElement("button");
+    saveChangesButton.classList.add("saveChangesBtn");
+    saveChangesButton.textContent = "Save Changes";
+    saveChangesButton.setAttribute("data-number", `${i}`);
+    saveChangesButton.style.display = "none";
 
     const removeButton = document.createElement("button");
     removeButton.classList.add("DeleteBtn");
@@ -85,18 +99,32 @@ displayBooks = () => {
     div.appendChild(p2);
     div.appendChild(statusButton);
     div.appendChild(editButton);
+    div.appendChild(saveChangesButton);
     div.appendChild(removeButton);
     booksAddedContainer.appendChild(div);
-
-    // Book Counter
-    bookCounter();
   }
 
-  // Edit button functionality
+  // Book Counter
+  bookCounter();
 
+  // run the button event listeners in displayBooks but outside the loop to prevent
+  // the event listeners being added multiple times by the loop.
+
+  readButtonLoop();
+  notReadButtonLoop();
+  deleteBtnLoop();
+  editBtnLoop();
+};
+
+// Edit button functionality
+
+editBtnLoop = () => {
   for (let i = 0; i < editBtn.length; i++) {
     editBtn[i].addEventListener("click", (event) => {
-      let editNum = event.target.getAttribute("data-number");
+      let num = event.target.getAttribute("data-number");
+      saveChangesButton[num].style.display = "block";
+      editBtn[num].style.display = "none";
+
       let titleInput = document.createElement("input");
       let authorInput = document.createElement("input");
       titleInput.classList.add("editInputField");
@@ -104,15 +132,16 @@ displayBooks = () => {
 
       // giving the inputs value of what your previously entered to make the edit easier
 
-      titleInput.value = myLibrary[editNum]["title"];
-      authorInput.value = myLibrary[editNum]["author"];
-      //
+      titleInput.value = myLibrary[num]["title"];
+      authorInput.value = myLibrary[num]["author"];
 
-      let saveChanges = document.createElement("button");
-      saveChanges.classList.add("saveChangesBtn");
-      saveChanges.textContent = "Save Changes";
+      // replaces the p tags with the input on the DOM
 
-      changeTitleAuthor = () => {
+      booksAdded[num].replaceChild(titleInput, booksAdded[num].childNodes[0]);
+
+      booksAdded[num].replaceChild(authorInput, booksAdded[num].childNodes[1]);
+
+      saveChanges = () => {
         if (titleInput.value === "") {
           alert("Please enter a title");
           return;
@@ -120,113 +149,71 @@ displayBooks = () => {
           alert("Please enter an author");
           return;
         } else {
-          myLibrary[editNum]["title"] = titleInput.value;
-          myLibrary[editNum]["author"] = authorInput.value;
+          myLibrary[num]["title"] = titleInput.value;
+          myLibrary[num]["author"] = authorInput.value;
         }
 
-        let p1 = document.createElement("p");
-        p1.textContent = myLibrary[editNum].title;
+        // so that the save changes button dissapears and the edit button comes back
+        // also saves us from having to manually change the inputs to P tags
 
-        let p2 = document.createElement("p");
-        p2.textContent = myLibrary[editNum].author;
-
-        booksAdded[editNum].replaceChild(p1, booksAdded[editNum].childNodes[0]);
-        booksAdded[editNum].replaceChild(p2, booksAdded[editNum].childNodes[1]);
-
-        booksAdded[editNum].childNodes[3].style.display = "none";
-        booksAdded[editNum].childNodes[4].style.display = "block";
-        // keeps remaking edit btn need to change
-
-        console.log(myLibrary);
+        clearBooksAdded();
+        displayBooks();
       };
 
-      saveChanges.addEventListener("click", changeTitleAuthor);
-
-      // replacing your book title and author nodes with the input
-
-      booksAdded[editNum].replaceChild(
-        titleInput,
-        booksAdded[editNum].childNodes[0]
-      );
-
-      booksAdded[editNum].replaceChild(
-        authorInput,
-        booksAdded[editNum].childNodes[1]
-      );
-
-      booksAdded[editNum].childNodes[3].style.display = "none";
-
-      booksAdded[editNum].insertBefore(
-        saveChanges,
-        booksAdded[editNum].childNodes[3]
-      );
+      for (let l = 0; l < saveChangesButton.length; l++) {
+        saveChangesButton[num].addEventListener("click", saveChanges);
+      }
     });
   }
+};
 
-  // getElementByClassName gives an array of objects, so we're getting every bookAdded div and adding the data-number attribute to it
+// getElementByClassName gives an array of objects, so we're getting every bookAdded div and adding the data-number attribute to it
 
-  removeFromLibrary = (event) => {
-    // getting the data-number from the delete button
-    let num = event.target.getAttribute("data-number");
-    // removing the a book from the myLibrary array. If we delete the object then we get empty objects within the array and the delete
-    // button doesn't align with the object. Splice lets us remove the object without any empty objects left in there
-    myLibrary.splice(num, 1);
-    clearBooksAdded();
+removeFromLibrary = (event) => {
+  // getting the data-number from the delete button
+  let num = event.target.getAttribute("data-number");
 
-    // now that we have this in the displayBooks function and we have called it again, its going to loop through the updated myLibrary
-    // array and assign 'updated' data-numbers to the remove buttons.
+  // removing the a book from the myLibrary array. If we delete the object then we get empty objects within the array and the delete
+  // button doesn't align with the object. Splice lets us remove the object without any empty objects left in there
+  myLibrary.splice(num, 1);
+  clearBooksAdded();
 
-    displayBooks();
-  };
+  // now that we have this in the displayBooks function and we have called it again, its going to loop through the updated myLibrary
+  // array and assign 'updated' data-numbers to the remove buttons.
 
-  // Delete Button event listener added in a loop so that once a new book is added a loop is ran to add an event listener to that button
+  displayBooks();
+};
 
-  for (let i = 0; i < deleteBtn.length; i++) {
-    deleteBtn[i].addEventListener("click", (event) => {
-      removeFromLibrary(event);
-    });
-  }
+// Delete Button event listener added in a loop so that once a new book is added a loop is ran to add an event listener to that button
 
-  changeToNotRead = (event) => {
-    // getting the data-number from the delete button
-    let num = event.target.getAttribute("data-number");
-    if (myLibrary[num].readYet === "Read") {
-      myLibrary[num].readYet = "Not Read";
-      const statusButton = document.createElement("button");
+// TRYING TO IMPLIMENT READ STATUS PROTOTYPE
+toggleReadStatus = (event) => {
+  let num = event.target.getAttribute("data-number");
+  //if (myLibrary[num].readYet === "Not Read") {
+  myLibrary[num].changeReadStatus();
 
-      statusButton.classList.add("NotReadBtn");
-    }
-    clearBooksAdded();
+  clearBooksAdded();
+  displayBooks();
+};
 
-    displayBooks();
-  };
+// Read Button event listener added in a loop to add an event listener to button
 
-  // Read Button event listener added in a loop to add an event listener to button
-
+readButtonLoop = () => {
   for (let i = 0; i < readBtn.length; i++) {
     readBtn[i].addEventListener("click", (event) => {
-      changeToNotRead(event);
+      toggleReadStatus(event);
+      console.log(myLibrary);
     });
   }
+};
 
-  changeToRead = (event) => {
-    let num = event.target.getAttribute("data-number");
-    if (myLibrary[num].readYet === "Not Read") {
-      myLibrary[num].readYet = "Read";
-      const statusButton = document.createElement("button");
+// Not Read Button event listener added in a loop to add an event listener to button
 
-      statusButton.classList.add("ReadBtn");
-    }
-    clearBooksAdded();
-
-    displayBooks();
-  };
-
-  // Not Read Button event listener added in a loop to add an event listener to button
-
+notReadButtonLoop = () => {
   for (let i = 0; i < notReadBtn.length; i++) {
     notReadBtn[i].addEventListener("click", (event) => {
-      changeToRead(event);
+      toggleReadStatus();
+      console.log(myLibrary);
     });
   }
 };
@@ -265,4 +252,82 @@ bookCounter = () => {
 
 // Event Listeners
 
+deleteBtnLoop = () => {
+  for (let i = 0; i < deleteBtn.length; i++) {
+    deleteBtn[i].addEventListener("click", (event) => {
+      removeFromLibrary(event);
+    });
+  }
+};
+
 addBookBtn.addEventListener("click", addBookToLibrary);
+
+/*let p1 = document.createElement("p");
+      p1.textContent = myLibrary[i].title;
+
+      let p2 = document.createElement("p");
+      p2.textContent = myLibrary[i].author;
+
+      // p1 and p2 replacing inputs
+
+      booksAdded[i].replaceChild(p1, booksAdded[i].childNodes[0]);
+      booksAdded[i].replaceChild(p2, booksAdded[i].childNodes[1]);
+
+      console.log(myLibrary);
+    };
+
+    // replacing your book title and author nodes with the input
+
+    booksAdded[editNum].replaceChild(
+      titleInput,
+      booksAdded[editNum].childNodes[0]
+    );
+
+    booksAdded[editNum].replaceChild(
+      authorInput,
+      booksAdded[editNum].childNodes[1]
+    ); */
+
+// OLD CODE THAT WORKED WITHOUT PROTOTYPE
+
+/* changeToNotRead = (event) => {
+    // getting the data-number from the delete button
+    let num = event.target.getAttribute("data-number");
+    if (myLibrary[num].readYet === "Read") {
+      myLibrary[num].readYet = "Not Read";
+      const statusButton = document.createElement("button");
+
+      statusButton.classList.add("NotReadBtn");
+    }
+    clearBooksAdded();
+
+    displayBooks();
+  };
+
+  changeToRead = (event) => {
+    let num = event.target.getAttribute("data-number");
+    if (myLibrary[num].readYet === "Not Read") {
+      myLibrary[num].readYet = "Read";
+      const statusButton = document.createElement("button");
+
+      statusButton.classList.add("ReadBtn");
+    }
+    clearBooksAdded();
+
+    displayBooks();
+  };
+
+
+booksAdded[editNum].childNodes[3].style.display = "none";
+
+booksAdded[editNum].insertBefore(
+  saveChanges,
+  booksAdded[editNum].childNodes[3]
+);
+
+booksAdded[i].childNodes[3].style.display = "none";
+booksAdded[i].childNodes[4].style.display = "block";
+
+
+
+*/
