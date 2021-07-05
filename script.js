@@ -27,9 +27,12 @@ function Book(title, author, readYet) {
 }
 
 Book.prototype.changeReadStatus = function () {
-  if (this.readYet === "Read") this.readYet === "Not Read";
-  else if (this.readYet === "Not Read") {
-    this.readYet === "Read";
+  if (this.readYet === "Read") {
+    this.readYet = "Not Read";
+    console.log(this);
+  } else if (this.readYet === "Not Read") {
+    this.readYet = "Read";
+    console.log(this);
   }
 };
 
@@ -202,7 +205,6 @@ readButtonLoop = () => {
   for (let i = 0; i < readBtn.length; i++) {
     readBtn[i].addEventListener("click", (event) => {
       toggleReadStatus(event);
-      console.log(myLibrary);
     });
   }
 };
@@ -212,8 +214,7 @@ readButtonLoop = () => {
 notReadButtonLoop = () => {
   for (let i = 0; i < notReadBtn.length; i++) {
     notReadBtn[i].addEventListener("click", (event) => {
-      toggleReadStatus();
-      console.log(myLibrary);
+      toggleReadStatus(event);
     });
   }
 };
@@ -261,73 +262,3 @@ deleteBtnLoop = () => {
 };
 
 addBookBtn.addEventListener("click", addBookToLibrary);
-
-/*let p1 = document.createElement("p");
-      p1.textContent = myLibrary[i].title;
-
-      let p2 = document.createElement("p");
-      p2.textContent = myLibrary[i].author;
-
-      // p1 and p2 replacing inputs
-
-      booksAdded[i].replaceChild(p1, booksAdded[i].childNodes[0]);
-      booksAdded[i].replaceChild(p2, booksAdded[i].childNodes[1]);
-
-      console.log(myLibrary);
-    };
-
-    // replacing your book title and author nodes with the input
-
-    booksAdded[editNum].replaceChild(
-      titleInput,
-      booksAdded[editNum].childNodes[0]
-    );
-
-    booksAdded[editNum].replaceChild(
-      authorInput,
-      booksAdded[editNum].childNodes[1]
-    ); */
-
-// OLD CODE THAT WORKED WITHOUT PROTOTYPE
-
-/* changeToNotRead = (event) => {
-    // getting the data-number from the delete button
-    let num = event.target.getAttribute("data-number");
-    if (myLibrary[num].readYet === "Read") {
-      myLibrary[num].readYet = "Not Read";
-      const statusButton = document.createElement("button");
-
-      statusButton.classList.add("NotReadBtn");
-    }
-    clearBooksAdded();
-
-    displayBooks();
-  };
-
-  changeToRead = (event) => {
-    let num = event.target.getAttribute("data-number");
-    if (myLibrary[num].readYet === "Not Read") {
-      myLibrary[num].readYet = "Read";
-      const statusButton = document.createElement("button");
-
-      statusButton.classList.add("ReadBtn");
-    }
-    clearBooksAdded();
-
-    displayBooks();
-  };
-
-
-booksAdded[editNum].childNodes[3].style.display = "none";
-
-booksAdded[editNum].insertBefore(
-  saveChanges,
-  booksAdded[editNum].childNodes[3]
-);
-
-booksAdded[i].childNodes[3].style.display = "none";
-booksAdded[i].childNodes[4].style.display = "block";
-
-
-
-*/
