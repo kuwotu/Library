@@ -16,9 +16,12 @@ const editBtn = document.getElementsByClassName("EditBtn");
 const saveChangesButton = document.getElementsByClassName("saveChangesBtn");
 const booksAddedDiv = document.getElementsByClassName("BooksAdded");
 
-const readStatus = document.querySelectorAll("[changeStatus]");
+const storedLibrary = localStorage.getItem("currentLibrary");
 
 let myLibrary = [];
+
+saveToLocalStorage = () =>
+  localStorage.setItem("currentLibrary", JSON.stringify(myLibrary));
 
 function Book(title, author, readYet) {
   this.title = title;
@@ -29,10 +32,8 @@ function Book(title, author, readYet) {
 Book.prototype.changeReadStatus = function () {
   if (this.readYet === "Read") {
     this.readYet = "Not Read";
-    console.log(this);
   } else if (this.readYet === "Not Read") {
     this.readYet = "Read";
-    console.log(this);
   }
 };
 
@@ -80,7 +81,6 @@ displayBooks = () => {
     } else if (myLibrary[i].readYet === "Read") {
       statusButton.classList.add("ReadBtn");
     }
-    statusButton.setAttribute("data-name", `changeStatus`);
     statusButton.setAttribute("data-number", `${i}`);
 
     const editButton = document.createElement("button");
@@ -166,6 +166,7 @@ editBtnLoop = () => {
       for (let l = 0; l < saveChangesButton.length; l++) {
         saveChangesButton[num].addEventListener("click", saveChanges);
       }
+      saveChangesButton[i].addEventListener("click", saveToLocalStorage);
     });
   }
 };
@@ -192,31 +193,9 @@ removeFromLibrary = (event) => {
 // TRYING TO IMPLIMENT READ STATUS PROTOTYPE
 toggleReadStatus = (event) => {
   let num = event.target.getAttribute("data-number");
-  //if (myLibrary[num].readYet === "Not Read") {
   myLibrary[num].changeReadStatus();
-
   clearBooksAdded();
   displayBooks();
-};
-
-// Read Button event listener added in a loop to add an event listener to button
-
-readButtonLoop = () => {
-  for (let i = 0; i < readBtn.length; i++) {
-    readBtn[i].addEventListener("click", (event) => {
-      toggleReadStatus(event);
-    });
-  }
-};
-
-// Not Read Button event listener added in a loop to add an event listener to button
-
-notReadButtonLoop = () => {
-  for (let i = 0; i < notReadBtn.length; i++) {
-    notReadBtn[i].addEventListener("click", (event) => {
-      toggleReadStatus(event);
-    });
-  }
 };
 
 // removes the previous dom elements so that the loop doesn't end up printing the same book multiple times
@@ -253,12 +232,46 @@ bookCounter = () => {
 
 // Event Listeners
 
+// Read, Not read and delete Button event listeners added in a loop to add an event listener for every new button made
+
+readButtonLoop = () => {
+  for (let i = 0; i < readBtn.length; i++) {
+    readBtn[i].addEventListener("click", (event) => {
+      toggleReadStatus(event);
+    });
+    readBtn[i].addEventListener("click", saveToLocalStorage);
+  }
+};
+
+notReadButtonLoop = () => {
+  for (let i = 0; i < notReadBtn.length; i++) {
+    notReadBtn[i].addEventListener("click", (event) => {
+      toggleReadStatus(event);
+    });
+    notReadBtn[i].addEventListener("click", saveToLocalStorage);
+  }
+};
+
 deleteBtnLoop = () => {
   for (let i = 0; i < deleteBtn.length; i++) {
     deleteBtn[i].addEventListener("click", (event) => {
       removeFromLibrary(event);
     });
+    deleteBtn[i].addEventListener("click", saveToLocalStorage);
   }
 };
 
 addBookBtn.addEventListener("click", addBookToLibrary);
+addBookBtn.addEventListener("click", saveToLocalStorage);
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+    console.log(storedLibrary);
+    if (storedLibrary) {
+      myLibrary = storedLibrary;
+      //displayBooks();
+    }
+  },
+  false
+);
