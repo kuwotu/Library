@@ -59,23 +59,28 @@
 /* To shuffle the headings */
 
 #BookLabel {
-  padding-right: 60px;
-  z-index: 1;
+  position: absolute;
+  left: 8vw;
 }
 
 #authorLabel {
-  padding-left: 20px;
-  z-index: 1;
+  position: absolute;
+  left: 27vw;
 }
 
 #statusLabel {
-  margin-left: 20px;
-  z-index: 1;
+  position: absolute;
+  left: 46vw;
 }
 
 #editLabel {
-  padding-right: 25px;
-  z-index: 1;
+  position: absolute;
+  right: 21.2vw;
+}
+
+#removeLabel {
+  position: absolute;
+  right: 8vw;
 }
 
 #AddBookContainer {

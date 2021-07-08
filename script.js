@@ -16,7 +16,7 @@ const editBtn = document.getElementsByClassName("EditBtn");
 const saveChangesButton = document.getElementsByClassName("saveChangesBtn");
 const booksAddedDiv = document.getElementsByClassName("BooksAdded");
 
-const storedLibrary = localStorage.getItem("currentLibrary");
+const storedLibrary = JSON.parse(localStorage.getItem("currentLibrary"));
 
 let myLibrary = [];
 
@@ -264,14 +264,30 @@ deleteBtnLoop = () => {
 addBookBtn.addEventListener("click", addBookToLibrary);
 addBookBtn.addEventListener("click", saveToLocalStorage);
 
+/*document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+    console.log(storedLibrary);
+    if (storedLibrary) {
+      myLibrary = storedLibrary;
+      for (var i = 0; i < myLibrary.length; i++) {
+        console.log(myLibrary[i]);
+      }
+    }
+    displayBooks();
+  },
+  false
+);*/
+
 document.addEventListener(
   "DOMContentLoaded",
   function () {
     console.log(storedLibrary);
     if (storedLibrary) {
       myLibrary = storedLibrary;
-      //displayBooks();
+      myLibrary.forEach((item) => item.prototype.changeReadStatus);
     }
+    displayBooks();
   },
   false
 );
