@@ -60,17 +60,17 @@
 
 #BookLabel {
   position: absolute;
-  left: 8vw;
+  left: 11vw;
 }
 
 #authorLabel {
   position: absolute;
-  left: 27vw;
+  left: 31vw;
 }
 
 #statusLabel {
   position: absolute;
-  left: 46vw;
+  left: 46.3vw;
 }
 
 #editLabel {
@@ -80,7 +80,7 @@
 
 #removeLabel {
   position: absolute;
-  right: 8vw;
+  right: 7.5vw;
 }
 
 #AddBookContainer {

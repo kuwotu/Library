@@ -264,28 +264,21 @@ deleteBtnLoop = () => {
 addBookBtn.addEventListener("click", addBookToLibrary);
 addBookBtn.addEventListener("click", saveToLocalStorage);
 
-/*document.addEventListener(
-  "DOMContentLoaded",
-  function () {
-    console.log(storedLibrary);
-    if (storedLibrary) {
-      myLibrary = storedLibrary;
-      for (var i = 0; i < myLibrary.length; i++) {
-        console.log(myLibrary[i]);
-      }
-    }
-    displayBooks();
-  },
-  false
-);*/
+// As soon as the document loads, take the storedLibrary and feed it through the Book
+// object to make the previously stored books have the prototype function
 
 document.addEventListener(
   "DOMContentLoaded",
   function () {
-    console.log(storedLibrary);
     if (storedLibrary) {
-      myLibrary = storedLibrary;
-      myLibrary.forEach((item) => item.prototype.changeReadStatus);
+      for (let i = 0; i < storedLibrary.length; i++) {
+        const newBook = new Book(
+          storedLibrary[i]["title"],
+          storedLibrary[i]["author"],
+          storedLibrary[i]["readYet"]
+        );
+        myLibrary.push(newBook);
+      }
     }
     displayBooks();
   },
