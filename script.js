@@ -23,19 +23,20 @@ let myLibrary = [];
 saveToLocalStorage = () =>
   localStorage.setItem("currentLibrary", JSON.stringify(myLibrary));
 
-function Book(title, author, readYet) {
-  this.title = title;
-  this.author = author;
-  this.readYet = readYet;
-}
-
-Book.prototype.changeReadStatus = function () {
-  if (this.readYet === "Read") {
-    this.readYet = "Not Read";
-  } else if (this.readYet === "Not Read") {
-    this.readYet = "Read";
+class Book {
+  constructor(title, author, readYet) {
+    this.title = title;
+    this.author = author;
+    this.readYet = readYet;
   }
-};
+  changeReadStatus() {
+    if (this.readYet === "Read") {
+      this.readYet = "Not Read";
+    } else if (this.readYet === "Not Read") {
+      this.readYet = "Read";
+    }
+  }
+}
 
 // assigned the value inputs as variable so that they can be passed through the new Book object
 
