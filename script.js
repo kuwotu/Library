@@ -44,17 +44,17 @@ addBookToLibrary = (e) => {
   // preventDefault stops the page from reloading once the form is submitted
 
   e.preventDefault();
-  let bookValue = bookName.value;
-  let authorValue = authorName.value;
-  let readValue = readOption.value;
-  if (bookValue === "") {
+  let bookText = bookName.value;
+  let authorText = authorName.value;
+  let readStatus = readOption.value;
+  if (bookText === "") {
     alert(`Please enter the name of the book`);
     return;
-  } else if (authorValue === "") {
+  } else if (authorText === "") {
     alert(`Please enter the name of the author`);
     return;
   }
-  const newBook = new Book(bookValue, authorValue, readValue);
+  const newBook = new Book(bookText, authorText, readStatus);
   myLibrary.push(newBook);
   console.log(myLibrary);
   clearInput();
@@ -129,32 +129,38 @@ editBtnLoop = () => {
       saveChangesButton[num].style.display = "block";
       editBtn[num].style.display = "none";
 
-      let titleInput = document.createElement("input");
-      let authorInput = document.createElement("input");
-      titleInput.classList.add("editInputField");
-      authorInput.classList.add("editInputField");
+      let editedTitleText = document.createElement("input");
+      let editedAuthorText = document.createElement("input");
+      editedTitleText.classList.add("editInputField");
+      editedAuthorText.classList.add("editInputField");
 
       // giving the inputs value of what your previously entered to make the edit easier
 
-      titleInput.value = myLibrary[num]["title"];
-      authorInput.value = myLibrary[num]["author"];
+      editedTitleText.value = myLibrary[num]["title"];
+      editedAuthorText.value = myLibrary[num]["author"];
 
       // replaces the p tags with the input on the DOM
 
-      booksAdded[num].replaceChild(titleInput, booksAdded[num].childNodes[0]);
+      booksAdded[num].replaceChild(
+        editedTitleText,
+        booksAdded[num].childNodes[0]
+      );
 
-      booksAdded[num].replaceChild(authorInput, booksAdded[num].childNodes[1]);
+      booksAdded[num].replaceChild(
+        editAuthorText,
+        booksAdded[num].childNodes[1]
+      );
 
       saveChanges = () => {
-        if (titleInput.value === "") {
+        if (editedTitleText.value === "") {
           alert("Please enter a title");
           return;
-        } else if (authorInput.value === "") {
+        } else if (editedAuthorText.value === "") {
           alert("Please enter an author");
           return;
         } else {
-          myLibrary[num]["title"] = titleInput.value;
-          myLibrary[num]["author"] = authorInput.value;
+          myLibrary[num]["title"] = editedTitleText.value;
+          myLibrary[num]["author"] = editedAuthorText.value;
         }
 
         // so that the save changes button dissapears and the edit button comes back
