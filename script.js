@@ -133,6 +133,8 @@ editBtnLoop = () => {
       let editedAuthorText = document.createElement("input");
       editedTitleText.classList.add("editInputField");
       editedAuthorText.classList.add("editInputField");
+      editedTitleText.required = true;
+      editedAuthorText.required = true;
 
       // giving the inputs value of what your previously entered to make the edit easier
 
@@ -147,7 +149,7 @@ editBtnLoop = () => {
       );
 
       booksAdded[num].replaceChild(
-        editAuthorText,
+        editedAuthorText,
         booksAdded[num].childNodes[1]
       );
 

@@ -26,14 +26,14 @@
           </div>
         
         <div id="AddBookContainer">
-          <form id="AddBookForm" autocomplete="off">
+          <form id="AddBookForm" autocomplete="off" >
           <p>Book</p>
-          <input type="text" id="bookName" class="inputField" placeholder="Book">
+          <input type="text" id="bookName" name="bookName" class="inputField" placeholder="Book" required>
           <p>Author</p>
-          <input type="text" id="authorName" class="inputField" placeholder="Author">
+          <input type="text" id="authorName" name="authorName" class="inputField" placeholder="Author" required>
           <div>
             <label>
-              <select name="read-option" id="readOption">
+              <select name="read-option" id="readOption" required>
                 <option value="Read">Read</option>
                 <option value="Not Read">Not Read</option>
             </select>
